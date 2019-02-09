@@ -1,4 +1,6 @@
-# Simple Wallet for Bitcoin Cash
+# Simple Bitcoin Wallet
+[![Build Status](https://travis-ci.com/honest-cash/simple-bitcoin-wallet.svg?branch=master)](https://travis-ci.com/honest-cash/simple-bitcoin-wallet)
+
 For web developers building applications for Bitcoin Cash, Simple Wallet provides an easy and quick way to create BCH wallets and send bitcoin around. simple-bitcoin-wallet gives developers high-level interfaces that hides most of the complexity required for such functionality. The mission is to make interaction with Bitcoin Cash Blockchain as simple as possible.
 
 Simple Wallet is used for <a href="https://honest.cash" target="_blank">Honest.Cash</a>. It uses a lightweight version of Bitbox - <a href="https://www.npmjs.com/package/bitbox-light">Bitbox Light</a>.
@@ -241,14 +243,15 @@ const simpleWallet2 = new SimpleWallet(localStorage.getItem("BCH_MNEMONIC"));
 
 * Simple Bitcoin Wallet is powered by <a href="https://www.npmjs.com/package/bitbox-light">Bitbox Light</a> (a fork of Bitbox SDK) and communicates with the Cloud API rest.bitcoin.com.
 
-# Author
- [https://adrianbarwicki.com](Adrian Barwicki)
-
 # Licence
-Unlicenced.
+**Copyright 2018-2019**
+- Adrian Barwicki (adrian@adrianbarwicki.com)
+- Rosco Kalis (rosco.kalis@gmail.com)
+- Honest Cash (honest.cash)
 
-Copyright 2018 Adrian Barwicki (adrianbarwicki@gmail.com)
+**MIT**
 
+## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-PS. This library is still in alpha. We will open-source it once it becomes mature.
+
