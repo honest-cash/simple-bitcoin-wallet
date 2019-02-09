@@ -6,7 +6,7 @@
   "homepage": "https://honest.cash",
   "scripts": {
     "start": "npm run build && live-server dist",
-    "test": "./node_modules/karma/bin/karma start",
+    "test": "./node_modules/karma/bin/karma start --single-run",
     "build": "node ./node_modules/gulp/bin/gulp.js && node ./node_modules/webpack/bin/webpack.js"
   },
   "output": {
@@ -70,6 +70,7 @@
     "karma": "^3.1.3",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^2.0.1",
+    "karma-phantomjs-launcher": "^1.0.4",
     "less-loader": "^4.1.0",
     "moment": "^2.22.2",
     "run-sequence": "^2.2.1",
