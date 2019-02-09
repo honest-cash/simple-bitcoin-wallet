@@ -1,0 +1,29 @@
+<html>
+    <script src="/simplewallet.min.js"></script>
+    <script src="/wallet.js"></script>
+    <script>
+      const data = {
+        title: "Hello wordl",
+        body: "Hello world",
+        author: "honest_cash"
+      };
+
+      // meta is optional
+      const meta = {
+        title: "hello wordl",
+        extUri: "https://honest.cash"
+      };
+
+      (async () => {
+        const { fileId } = await simpleWallet.upload(data, meta);
+
+        console.log(fileId);
+
+        setTimeout(async () => {
+          const result = await simpleWallet.download(fileId);
+
+          console.log(result);
+        }, 3000);
+      })();
+  </script>
+</html>

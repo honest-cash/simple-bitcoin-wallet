@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>ATH Component Boilerplate</title>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <!--START OF External dependencies-->
+
+        <!--END OF External dependencies-->
+    </head>
+    <body>
+        <div>
+            <h2>Mnemonic:</h2>
+            <div id="mnemonic"></div>
+
+            <h2>Cash address:</h2>
+            <div id="cashAddress"></div>
+
+            <h2>Legacy Address:</h2>
+            <div id="legacyAddress"></div>
+
+            <h2>Private Key:</h2>
+            <div id="privateKey"></div>
+        </div>
+
+        <div>
+            <button id="createNewWalletBtn">Create new</button>
+        </div>
+
+        <!-- Load the ATH component library -->
+        <script type="text/javascript" src="/simplewallet.min.js"></script>
+
+        <!--
+            Bootstrap the component
+            @param {string} domID The CSS selector of the component's div wrapper
+            @param {string} apiUrl Api's URL (without any slash at the end)
+        -->
+        <script>
+            var mnemonic = localStorage.getItem("BCH_MNEMONIC");
+            var simpleWallet;
+
+            if (mnemonic) {
+                createNewWallet(mnemonic);
+            }
+
+            document.getElementById("createNewWalletBtn").addEventListener("click", function() {
+                createNewWallet();
+            });
+
+            document.getElementById("saveBtn").addEventListener("click", function() {
+                localStorage.setItem("BCH_MNEMONIC", simpleWallet.mnemonic);
+            });
+
+            document.getElementById("removeBtn").addEventListener("click", function() {
+                removeWalletLocally();
+            });
+
+            function createNewWallet(lMnemonic) {
+                var simpleWallet = new SimpleWallet(lMnemonic);
+
+                document.getElementById("mnemonic").innerHTML = simpleWallet.mnemonic;
+                document.getElementById("cashAddress").innerHTML = simpleWallet.cashAddress;
+                document.getElementById("privateKey").innerHTML = simpleWallet.privateKey;
+                document.getElementById("legacyAddress").innerHTML = simpleWallet.legacyAddress;
+            }
+
+            function saveWalletLocally() {
+                localStorage.setItem("BCH_MNEMONIC", simpleWallet.mnemonic);
+            }
+
+            function removeWalletLocally() {
+                delete simpleWallet;
+
+                document.getElementById("mnemonic").innerHTML = "";
+                document.getElementById("cashAddress").innerHTML = "";
+                document.getElementById("privateKey").innerHTML = "";
+                document.getElementById("legacyAddress").innerHTML = "";
+
+                localStorage.setItem("BCH_MNEMONIC", "");
+            }
+        </script>
+    </body>
+</html>

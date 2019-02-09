@@ -1,0 +1,21 @@
+<html>
+    <script src="/simplewallet.min.js"></script>
+    <script src="/wallet.js"></script>
+    <script>
+      (async () => {
+        const outputs = [
+          {
+              address: "bitcoincash:qz0kzgg4c4jhy7mdquk9uextdq7jmrf8tsuqkq38a4",
+              amountSat: 67850
+          }, {
+            opReturn: ["0x4801", "123"]
+        },
+        ];
+        // console.log(simpleWallet.cashAddress);
+
+        const tx = await simpleWallet.send(outputs);
+
+        console.log(tx);
+    })();
+</script>
+</html>

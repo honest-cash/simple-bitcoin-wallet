@@ -1,0 +1,8 @@
+node_modules/
+.vs/
+.vscode/
+dist/
+src/.DS_Store
+.DS_Store
+releases/
+examples/index.html
