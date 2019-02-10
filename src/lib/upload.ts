@@ -31,7 +31,7 @@ async function getUtxo(address: string, log=true) {
 export const upload = async (obj: IObj, walletInfo: IWalletInfo) => {
     const processedData = typeof obj.data === "string" ? obj.data : JSON.stringify(obj.data);
 
-    const someFileBuffer = new Buffer.from(processedData);
+    const someFileBuffer = Buffer.from(processedData);
     const fileName = obj.title;
     const fileExt = obj.ext || "json";
     const fileUri = obj.extUri;
@@ -58,9 +58,7 @@ export const upload = async (obj: IObj, walletInfo: IWalletInfo) => {
     // 4 - Make sure address above is funded with the amount equal to the uploadCost
     let fundingUtxo = await getUtxo(fundingAddress);
 
-    let fileId: string;
-
-    fileId = await bfp.uploadFile(fundingUtxo, fundingAddress, fundingWif, someFileBuffer, fileName, fileExt, null, fileUri);
+    let fileId = await bfp.uploadFile(fundingUtxo, fundingAddress, fundingWif, someFileBuffer, fileName, fileExt, null, fileUri);
 
     return { fileId, uploadCost };
 };

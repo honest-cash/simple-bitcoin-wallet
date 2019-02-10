@@ -1,5 +1,5 @@
 import { upload, download } from "./upload";
-import { IAdvancedOptions, IUploadResponse } from "../interfaces";
+import { IAdvancedOptions, IUploadResponse } from "./interfaces";
 import SimpleWallet from "./SimpleBitcoinWallet";
 interface IMetaData {
   title?: string;

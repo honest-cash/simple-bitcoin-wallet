@@ -47,7 +47,7 @@ const createOpReturnScript = (
 ) => {
     let script = [
         BITBOX.Script.opcodes.OP_RETURN,
-        ...opReturnOutput.opReturn.map((output: IOpReturnOutput) => toBuffer(output))
+        ...opReturnOutput.opReturn.map((output: string) => toBuffer(output))
     ];
 
     return BITBOX.Script.encode(script);
@@ -93,7 +93,7 @@ export const createTransaction = async (
 
     // Select the utxos needed for this transaction
     const utxos = await BITBOX.Address.utxo(walletInfo.cashAddress);
-    const sortedUtxos = sortUtxoFromLowestToBiggest(utxos);
+    const sortedUtxos = sortUtxosBySize(utxos, SortingOrder.ASCENDING);
 
     const satoshisToSend = receivers.reduce((acc, receiver) => acc + receiver.amountSat, 0);
     const satoshisNeeded = satoshisToSend + feeEstimate;

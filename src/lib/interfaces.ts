@@ -19,9 +19,9 @@ export const isOpReturnOutput = (o: ITxOutput): boolean => {
 export interface ITxOutput {};
 
 export interface IAdvancedOptions {
-  password: string;
-  HdPath: string;
-  accountIndex: string;
+  password?: string;
+  HdPath?: string;
+  accountIndex?: string;
 }
 
 export interface IUploadResponse {
