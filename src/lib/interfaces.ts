@@ -33,3 +33,22 @@ export interface IWalletInfo {
   cashAddress: string,
   HdPath: string
 }
+
+export interface ISeparatedOutputs {
+  receivers: ITransactionReceiver[],
+  opReturnScripts: any[]
+}
+
+export interface IUtxo {
+  txid: string,
+  vout: number,
+  amount: number,
+  satoshis: number,
+  height: number,
+  confirmations: number
+}
+
+export interface IHexTransaction {
+  hex: string,
+  txid: string
+}

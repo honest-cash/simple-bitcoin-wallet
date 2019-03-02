@@ -1,10 +1,5 @@
+import { IUtxo } from './interfaces';
 // Returns the utxo with the biggest balance from an array of utxos.
-
-interface IUtxo {
-    satoshis: number;
-    vout: number;
-    txid: string;
-}
 
 export enum SortingOrder {
     ASCENDING,
@@ -12,7 +7,10 @@ export enum SortingOrder {
 }
 
 // Sort utxos by their size in satoshis. Can specify a sorting order (defaults to ascending).
-export const sortUtxosBySize = (utxos: IUtxo[], sortingOrder: SortingOrder = SortingOrder.ASCENDING): IUtxo[] => {
+export const sortUtxosBySize = (
+    utxos: IUtxo[],
+    sortingOrder: SortingOrder = SortingOrder.ASCENDING
+): IUtxo[] => {
     if (sortingOrder === SortingOrder.ASCENDING) {
         return utxos.sort((a, b) => a.satoshis - b.satoshis);
     } else {
@@ -20,7 +18,9 @@ export const sortUtxosBySize = (utxos: IUtxo[], sortingOrder: SortingOrder = Sor
     }
 }
 
-export const findBiggestUtxo = (utxos: IUtxo[]) => {
+export const findBiggestUtxo = (
+    utxos: IUtxo[]
+): IUtxo => {
     let largestAmount = 0
     let largestIndex = 0
 

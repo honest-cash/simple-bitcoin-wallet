@@ -1,39 +1,18 @@
 const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
 const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v1/" });
 
-import { getWalletInfo } from "./getWalletInfo";
 import { sortUtxosBySize, SortingOrder } from "./utils";
-import { ITransactionReceiver, IWalletInfo, IOpReturnOutput, ITxOutput, isTransactionReceiver, isOpReturnOutput } from "./interfaces";
+import { ITransactionReceiver, IWalletInfo, IOpReturnOutput, ITxOutput, isTransactionReceiver, isOpReturnOutput, ISeparatedOutputs, IUtxo, IHexTransaction } from "./interfaces";
 import { Buffer } from 'buffer';
 
-// Generate a change address from a Mnemonic of a private key.
+
 function changeAddrFromMnemonic(mnemonic: string, HdPath: string) {
-    // root seed buffer
     const rootSeed = BITBOX.Mnemonic.toSeed(mnemonic)
-
-    // master HDNode
-    const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed/** , "testnet"*/)
-
-    // HDNode of BIP44 account
+    const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed/*, "bchtest"*/)
     const change = BITBOX.HDNode.derivePath(masterHDNode, HdPath)
 
     return change;
 }
-
-// Get the balance in BCH of a BCH address.
-async function getBCHBalance(addr: string, verbose: boolean = false) {
-    try {
-        const result = await getWalletInfo(addr, verbose);
-
-        if (verbose) console.log(result)
-
-        return result.balance
-    } catch (err) {
-        console.error("Error in getBCHBalance: ", err)
-        console.log(`addr: ${addr}`)
-        throw err
-    }
-};
 
 const toBuffer = (output: string): Buffer => {
     const data = output.replace(/^0x/, '');
@@ -69,106 +48,102 @@ const calculateFee = (
     return Math.floor((byteCount + opReturnByteCount) * satsPerByte);
 }
 
-export const createTransaction = async (
-    outputs: ITxOutput[],
-    walletInfo: IWalletInfo
-) => {
+const separateOutputs = (
+    outputs: ITxOutput[]
+): ISeparatedOutputs => {
     const receivers = outputs.filter((output) => isTransactionReceiver(output)) as ITransactionReceiver[];
     const opReturnScripts = outputs
             .filter((output) => isOpReturnOutput(output))
             .map((output) => createOpReturnScript(output as IOpReturnOutput));
-    const feeEstimate = calculateFee(1, receivers, opReturnScripts);
 
-    // Get the balance of the sending address.
-    const balance = await getBCHBalance(walletInfo.cashAddress, false);
-    console.log(`Balance of sending address ${walletInfo.cashAddress} is ${balance} BCH.`)
+    return { receivers, opReturnScripts };
+}
 
-    // Exit if the balance is below fee estimate.
-    if (balance <= BITBOX.BitcoinCash.toBitcoinCash(feeEstimate)) {
-        console.log(`Balance of sending address (${balance}) is below fee estimate (${BITBOX.BitcoinCash.toBitcoinCash(feeEstimate)}).`);
-        throw new Error("Insufficient balance");
-    }
+const getNecessaryUtxosAndChange = (
+    outputs: ISeparatedOutputs,
+    availableUtxos: IUtxo[]
+): { necessaryUtxos: IUtxo[], change: number} => {
+    const sortedUtxos = sortUtxosBySize(availableUtxos, SortingOrder.ASCENDING);
 
-    const transactionBuilder = new BITBOX.TransactionBuilder(/* "testnet" */);
-
-    // Select the utxos needed for this transaction
-    const utxos = await BITBOX.Address.utxo(walletInfo.cashAddress);
-    const sortedUtxos = sortUtxosBySize(utxos, SortingOrder.ASCENDING);
-
-    const satoshisToSend = receivers.reduce((acc, receiver) => acc + receiver.amountSat, 0);
-    const satoshisNeeded = satoshisToSend + feeEstimate;
+    let fee = calculateFee(0, outputs.receivers, outputs.opReturnScripts);
+    let satoshisToSend = outputs.receivers.reduce((acc, receiver) => acc + receiver.amountSat, 0);
+    let satoshisNeeded = satoshisToSend + fee;
 
     let satoshisAvailable = 0;
-    let utxoIndex = 0;
+    let necessaryUtxos: IUtxo[] = [];
 
-    while (satoshisAvailable < satoshisNeeded && utxoIndex < sortedUtxos.length) {
-        console.log(sortedUtxos[utxoIndex]);
+    for (let utxo of sortedUtxos) {
+        necessaryUtxos.push(utxo)
+        satoshisAvailable += utxo.satoshis;
 
-        transactionBuilder.addInput(sortedUtxos[utxoIndex].txid, sortedUtxos[utxoIndex].vout);
-        satoshisAvailable += sortedUtxos[utxoIndex].satoshis;
-        utxoIndex++;
+        // Additional cost per Utxo input is 148 sats
+        satoshisNeeded += 148;
+
+        if (satoshisAvailable > satoshisNeeded) break;
     }
 
-    if (satoshisNeeded > satoshisAvailable) {
+    let change = satoshisAvailable - satoshisNeeded;
+
+    if (change < 0) {
         console.log(`Available satoshis (${satoshisAvailable}) below needed satoshis (${satoshisNeeded}).`);
         throw new Error("Insufficient balance");
     }
 
-    let txFee = calculateFee(utxoIndex, receivers, opReturnScripts);
-    let remainder = satoshisAvailable - satoshisToSend - txFee;
+    return { necessaryUtxos, change };
+}
 
-    if (remainder < 0) {
-        // Add one additional utxo if it's available
-        if (utxoIndex < sortedUtxos.length) {
-            transactionBuilder.addInput(sortedUtxos[utxoIndex].txid, sortedUtxos[utxoIndex].vout);
-            satoshisAvailable += sortedUtxos[utxoIndex].satoshis;
-            utxoIndex++;
+export const createTransaction = async (
+    outputs: ITxOutput[],
+    walletInfo: IWalletInfo
+): Promise<IHexTransaction> => {
+    const separatedOutputs = separateOutputs(outputs);
+    const utxos = await BITBOX.Address.utxo(walletInfo.cashAddress);
+    const { necessaryUtxos, change } = getNecessaryUtxosAndChange(separatedOutputs, utxos);
 
-            txFee = calculateFee(utxoIndex, receivers, opReturnScripts);
-            remainder = satoshisAvailable - satoshisToSend - txFee;
-        } else {
-            throw new Error("Insufficient balance (not enough to pay transaction fees)");
-        }
-    }
+    const transactionBuilder = new BITBOX.TransactionBuilder(/* "bchtest" */);
 
-    console.log("Change is " + remainder);
+    // Add inputs
+    necessaryUtxos.forEach(utxo => {
+        transactionBuilder.addInput(utxo.txid, utxo.vout);
+    });
 
-    for (let receiver of receivers) {
+    // Add outputs
+    separatedOutputs.receivers.forEach(receiver => {
         transactionBuilder.addOutput(receiver.address, receiver.amountSat);
-    }
+    });
 
-    for (let script of opReturnScripts) {
+    separatedOutputs.opReturnScripts.forEach(script => {
         transactionBuilder.addOutput(script, 0);
+    });
+
+    if (change && change > 546) {
+        transactionBuilder.addOutput(walletInfo.cashAddress, change);
     }
 
-    if (remainder && remainder > 546) {
-        transactionBuilder.addOutput(walletInfo.cashAddress, remainder);
-    }
+    // Sign inputs
+    const changeAddr = changeAddrFromMnemonic(walletInfo.mnemonic, walletInfo.HdPath)
+    const keyPair = BITBOX.HDNode.toKeyPair(changeAddr)
 
-    // Generate a change address from a Mnemonic of a private key.
-    const change = changeAddrFromMnemonic(walletInfo.mnemonic, walletInfo.HdPath)
-    // Generate a keypair from the change address.
-    const keyPair = BITBOX.HDNode.toKeyPair(change)
-
-    for (let index = 0; index < utxoIndex; index++) {
-        // Sign the transaction with the HD node.
+    necessaryUtxos.forEach((utxo, i) => {
         let redeemScript;
 
         transactionBuilder.sign(
-            index,
+            i,
             keyPair,
             redeemScript,
             transactionBuilder.hashTypes.SIGHASH_ALL,
-            sortedUtxos[index].satoshis
+            utxo.satoshis
         );
-    }
+    });
 
     const tx = transactionBuilder.build();
-
     return { hex: tx.toHex(), txid: tx.getId() };
 }
 
-export const sendBch = async (outputs: ITxOutput[], walletInfo: IWalletInfo) => {
+export const sendBch = async (
+    outputs: ITxOutput[],
+    walletInfo: IWalletInfo
+): Promise<IHexTransaction> => {
     const transaction = await createTransaction(outputs, walletInfo);
 
     try {
