@@ -64,15 +64,9 @@ export const upload = async (obj: IObj, walletInfo: IWalletInfo) => {
 };
 
 export const download = async (uri: string) => {
-  let result;
-
-  result = await bfp.downloadFile(uri);
-
+  let result = await bfp.downloadFile(uri);
   let fileBuffer = result.fileBuf;
-
   const data = fileBuffer.toString();
 
-  return {
-      data: data
-  };
+  return { data };
 };

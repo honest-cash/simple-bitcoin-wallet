@@ -1,9 +1,8 @@
 const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
 const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v1/" });
 
-import { sortUtxosBySize, SortingOrder } from "./utils";
+import { sortUtxosBySize, SortingOrder, toBuffer } from "./utils";
 import { ITransactionReceiver, IWalletInfo, IOpReturnOutput, ITxOutput, isTransactionReceiver, isOpReturnOutput, ISeparatedOutputs, IUtxo, IHexTransaction } from "./interfaces";
-import { Buffer } from 'buffer';
 
 
 function changeAddrFromMnemonic(mnemonic: string, HdPath: string) {
@@ -12,13 +11,6 @@ function changeAddrFromMnemonic(mnemonic: string, HdPath: string) {
     const change = BITBOX.HDNode.derivePath(masterHDNode, HdPath)
 
     return change;
-}
-
-const toBuffer = (output: string): Buffer => {
-    const data = output.replace(/^0x/, '');
-    const format = data === output ? 'utf8' : 'hex';
-
-    return Buffer.from(data, format);
 }
 
 const createOpReturnScript = (
@@ -34,10 +26,11 @@ const createOpReturnScript = (
 
 const calculateFee = (
     utxoCount: number,
-    receivers: ITransactionReceiver[],
-    opReturnScripts: any[],
+    separatedOutputs: ISeparatedOutputs,
     satsPerByte: number = 1.0
 ): number => {
+    const { receivers, opReturnScripts } = separatedOutputs;
+
     const byteCount = BITBOX.BitcoinCash.getByteCount(
         { P2PKH: utxoCount },
         { P2PKH: 1 + receivers.length, P2SH: opReturnScripts.length }
@@ -51,7 +44,8 @@ const calculateFee = (
 const separateOutputs = (
     outputs: ITxOutput[]
 ): ISeparatedOutputs => {
-    const receivers = outputs.filter((output) => isTransactionReceiver(output)) as ITransactionReceiver[];
+    const receivers = outputs
+            .filter((output) => isTransactionReceiver(output)) as ITransactionReceiver[];
     const opReturnScripts = outputs
             .filter((output) => isOpReturnOutput(output))
             .map((output) => createOpReturnScript(output as IOpReturnOutput));
@@ -62,10 +56,10 @@ const separateOutputs = (
 const getNecessaryUtxosAndChange = (
     outputs: ISeparatedOutputs,
     availableUtxos: IUtxo[]
-): { necessaryUtxos: IUtxo[], change: number} => {
+): { necessaryUtxos: IUtxo[], change: number } => {
     const sortedUtxos = sortUtxosBySize(availableUtxos, SortingOrder.ASCENDING);
 
-    let fee = calculateFee(0, outputs.receivers, outputs.opReturnScripts);
+    let fee = calculateFee(0, outputs);
     let satoshisToSend = outputs.receivers.reduce((acc, receiver) => acc + receiver.amountSat, 0);
     let satoshisNeeded = satoshisToSend + fee;
 

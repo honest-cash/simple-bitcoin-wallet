@@ -1,5 +1,5 @@
 import { IUtxo } from './interfaces';
-// Returns the utxo with the biggest balance from an array of utxos.
+import { Buffer } from 'buffer';
 
 export enum SortingOrder {
     ASCENDING,
@@ -18,20 +18,18 @@ export const sortUtxosBySize = (
     }
 }
 
+// Returns the utxo with the biggest balance from an array of utxos.
 export const findBiggestUtxo = (
     utxos: IUtxo[]
 ): IUtxo => {
-    let largestAmount = 0
-    let largestIndex = 0
-
-    for (var i = 0; i < utxos.length; i++) {
-        const thisUtxo = utxos[i]
-
-        if (thisUtxo.satoshis > largestAmount) {
-            largestAmount = thisUtxo.satoshis
-            largestIndex = i
-        }
-    }
-
-    return utxos[largestIndex]
+    if (utxos.length === 0) return null;
+    return sortUtxosBySize(utxos, SortingOrder.DESCENDING)[0];
 };
+
+export const toBuffer = (
+    output: string
+): Buffer => {
+    const data = output.replace(/^0x/, '');
+    const format = data === output ? 'utf8' : 'hex';
+    return Buffer.from(data, format);
+}
