@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require("webpack");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const package = require('./package.json');
 
 module.exports = {
     mode: 'production',
@@ -59,7 +60,7 @@ module.exports = {
             },
             extractComments: {
                 condition: 'all',
-                banner: `2018-2019 Copyright Adrian Barwicki adrian@adrianbarwicki.com`
+                banner: `${package.name} v${package.version}. 2018-2019 Copyright Adrian Barwicki adrian@adrianbarwicki.com`
             }
         })]
     },

@@ -1,6 +1,6 @@
 {
   "name": "simple-bitcoin-wallet",
-  "version": "0.0.6-alpha.4",
+  "version": "0.0.6-alpha.5",
   "description": "For web developers building applications for Bitcoin Cash, Simple Wallet provides an easy and quick way to create BCH wallets and send bitcoin around. simple-wallet give developers high-level interfaces that hides most of the complexity required for such functionality. The mission is to make interaction with Bitcoin Cash Blockchain as simple as possible.",
   "author": "Adrian Barwicki",
   "homepage": "https://honest.cash",
