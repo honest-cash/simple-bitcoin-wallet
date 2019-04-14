@@ -59,7 +59,7 @@ module.exports = {
             },
             extractComments: {
                 condition: 'all',
-                banner: `2018 Copyright. Adrian Barwicki adrianbarwicki@gmail.com`
+                banner: `2018-2019 Copyright Adrian Barwicki adrian@adrianbarwicki.com`
             }
         })]
     },

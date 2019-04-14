@@ -1,4 +1,15 @@
 describe("wallet", () => {
+    it("loads SimpleWallet", () => {
+      expect(SimpleWallet.decrypt).toBeDefined();
+      expect(SimpleWallet.encrypt).toBeDefined();
+
+      const simpleWallet = new SimpleWallet();
+
+      expect(simpleWallet.cashAddress).toBeDefined();
+      expect(simpleWallet.legacyAddress).toBeDefined();
+      expect(simpleWallet.mnemonic).toBeDefined();
+  });
+
     it("loads HDPath", () => {
         const simpleWallet1 = new SimpleWallet('grape host visa juice guess fitness clock accident sting output blast glove', {
             HdPath: "m/44'/0'/0'/1'"
@@ -50,6 +61,14 @@ describe("Mnemonic encryption", () => {
       expect(simpleWallet2.mnemonic).toBe(mnemonic);
       expect(simpleWallet3.mnemonic === mnemonic).toBe(false);
   });
+
+  it("encrypts / decrypts mnemonic", () => {
+    const simpleWallet = new SimpleWallet("U2FsdGVkX19NV28bxcoBIA6hS2eZDU5AV8uoRVNK6xnCoRsDFj0dq3ELcSelTE1t6pX+UiOEa0x1m4URFk1ZgQ61oglnNcC+Qh9Piw2ndpyJUE/F4aytvq3FE0mva2to", {
+      password: "myStrongPassword123"
+    });
+
+    expect(simpleWallet.mnemonic).toBe("clean subway seven company online birth near casino boat picture manage kit");
+});
 
   it("static encrypt() / decrypt() methods", () => {
     const mnemonic = "grape host visa juice guess fitness clock accident sting output blast glove";
