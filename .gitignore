@@ -1,6 +1,7 @@
 node_modules/
 .vs/
 .vscode/
+.idea/
 dist/
 src/.DS_Store
 .DS_Store

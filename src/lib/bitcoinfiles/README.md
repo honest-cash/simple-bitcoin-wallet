@@ -19,7 +19,7 @@ Other tools using the Bitcoin Files Protocol include:
 
 # Example File Download
 ```javascript
-const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
+const BITBOXSDK = require('bitbox-sdk').BITBOX
 
 const Bfp = require('bitcoinfiles').bfp;
 const bfp = new Bfp(BITBOXSDK);
@@ -46,7 +46,7 @@ let fileBuffer = result.fileBuf;
 Below is a simple example.  For a more complete React.js [file upload example](https://github.com/simpleledger/SimpleToken.cash/blob/master/src/UploadDialog.js) visit [SimpleToken.cash website](https://simpletoken.cash)
 
 ```javascript
-const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
+const BITBOXSDK = require('bitbox-sdk').BITBOX
     , BITBOX = new BITBOXSDK()
 
 const Bfp = require('bitcoinfiles').bfp;

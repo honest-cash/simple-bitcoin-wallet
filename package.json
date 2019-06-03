@@ -1,6 +1,6 @@
 {
   "name": "simple-bitcoin-wallet",
-  "version": "0.0.6-alpha.5",
+  "version": "0.0.7",
   "description": "For web developers building applications for Bitcoin Cash, Simple Wallet provides an easy and quick way to create BCH wallets and send bitcoin around. simple-wallet give developers high-level interfaces that hides most of the complexity required for such functionality. The mission is to make interaction with Bitcoin Cash Blockchain as simple as possible.",
   "author": "Adrian Barwicki",
   "homepage": "https://honest.cash",
@@ -17,6 +17,11 @@
       "name": "Adrian Barwicki",
       "email": "adrian@adrianbarwicki.com",
       "url": "https://adrianbarwicki.com"
+    },
+    {
+      "name": "Sercan AKMAN",
+      "email": "sercanakman@gmail.com",
+      "url": "https://github.com/nynevi"
     }
   ],
   "keywords": [
@@ -55,7 +60,7 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "bitbox-light": "^2.3.6",
+    "bitbox-sdk": "^8.3.2",
     "bitcoinfiles": "^0.3.8",
     "css-loader": "^1.0.0",
     "eslint": "^5.3.0",

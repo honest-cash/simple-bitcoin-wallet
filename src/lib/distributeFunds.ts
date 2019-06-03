@@ -1,14 +1,14 @@
-const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
-const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v1/" });
+const BITBOXSDK = require('bitbox-sdk').BITBOX;
+const BITBOX = new BITBOXSDK({ restURL: "https://rest.bitcoin.com/v2/" });
 
 import { sortUtxosBySize, SortingOrder, toBuffer } from "./utils";
 import { ITransactionReceiver, IWalletInfo, IOpReturnOutput, ITxOutput, isTransactionReceiver, isOpReturnOutput, ISeparatedOutputs, IUtxo, IHexTransaction } from "./interfaces";
 
 
 function changeAddrFromMnemonic(mnemonic: string, HdPath: string) {
-    const rootSeed = BITBOX.Mnemonic.toSeed(mnemonic)
-    const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed/*, "bchtest"*/)
-    const change = BITBOX.HDNode.derivePath(masterHDNode, HdPath)
+    const rootSeed = BITBOX.Mnemonic.toSeed(mnemonic);
+    const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed/*, "bchtest"*/);
+    const change = BITBOX.HDNode.derivePath(masterHDNode, HdPath);
 
     return change;
 }
@@ -22,7 +22,7 @@ const createOpReturnScript = (
     ];
 
     return BITBOX.Script.encode(script);
-}
+};
 
 const calculateFee = (
     utxoCount: number,
@@ -39,7 +39,7 @@ const calculateFee = (
     const opReturnByteCount = opReturnScripts.reduce((acc, script) => acc + script.byteLength, 0);
 
     return Math.floor((byteCount + opReturnByteCount) * satsPerByte);
-}
+};
 
 const separateOutputs = (
     outputs: ITxOutput[]
@@ -51,7 +51,7 @@ const separateOutputs = (
             .map((output) => createOpReturnScript(output as IOpReturnOutput));
 
     return { receivers, opReturnScripts };
-}
+};
 
 const getNecessaryUtxosAndChange = (
     outputs: ISeparatedOutputs,
@@ -84,14 +84,14 @@ const getNecessaryUtxosAndChange = (
     }
 
     return { necessaryUtxos, change };
-}
+};
 
 export const createTransaction = async (
     outputs: ITxOutput[],
     walletInfo: IWalletInfo
 ): Promise<IHexTransaction> => {
     const separatedOutputs = separateOutputs(outputs);
-    const utxos = await BITBOX.Address.utxo(walletInfo.cashAddress);
+    const utxos = (await BITBOX.Address.utxo(walletInfo.cashAddress)).utxos;
     const { necessaryUtxos, change } = getNecessaryUtxosAndChange(separatedOutputs, utxos);
 
     const transactionBuilder = new BITBOX.TransactionBuilder(/* "bchtest" */);
@@ -115,8 +115,8 @@ export const createTransaction = async (
     }
 
     // Sign inputs
-    const changeAddr = changeAddrFromMnemonic(walletInfo.mnemonic, walletInfo.HdPath)
-    const keyPair = BITBOX.HDNode.toKeyPair(changeAddr)
+    const changeAddr = changeAddrFromMnemonic(walletInfo.mnemonic, walletInfo.HdPath);
+    const keyPair = BITBOX.HDNode.toKeyPair(changeAddr);
 
     necessaryUtxos.forEach((utxo, i) => {
         let redeemScript;
@@ -132,7 +132,7 @@ export const createTransaction = async (
 
     const tx = transactionBuilder.build();
     return { hex: tx.toHex(), txid: tx.getId() };
-}
+};
 
 export const sendBch = async (
     outputs: ITxOutput[],
