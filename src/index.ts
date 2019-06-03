@@ -1,7 +1,7 @@
 import SimpleBitcoinDatabase from "./lib/SimpleBitcoinDatabase";
 
-const BITBOXSDK = require('bitbox-sdk');
-const BITBOX = new BITBOXSDK.default();
+const BITBOXSDK = require('bitbox-sdk').BITBOX;
+const BITBOX = new BITBOXSDK();
 
 export default SimpleBitcoinDatabase;
 

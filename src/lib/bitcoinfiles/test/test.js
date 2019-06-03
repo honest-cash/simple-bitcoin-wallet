@@ -1,4 +1,4 @@
-const BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
+const BITBOXSDK = require('bitbox-sdk').BITBOX
     , BITBOX = new BITBOXSDK();
 
 const assert = require('assert');

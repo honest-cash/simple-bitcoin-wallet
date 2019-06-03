@@ -2,10 +2,10 @@
 import { findBiggestUtxo } from "./utils";
 import { bfp as Bfp } from "./bitcoinfiles/index";
 
-const BITBOXSDK = require('bitbox-sdk');
-const BITBOX = new BITBOXSDK.default();
+const BITBOXSDK = require('bitbox-sdk').BITBOX;
+const BITBOX = new BITBOXSDK();
 
-const bfp = new Bfp(BITBOXSDK.default);
+const bfp = new Bfp(BITBOXSDK);
 
 interface IObj {
     data: any,

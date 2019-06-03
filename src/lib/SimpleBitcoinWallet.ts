@@ -3,8 +3,8 @@ import { sendBch } from "./distributeFunds";
 import { getWalletInfo } from "./getWalletInfo";
 import { IAdvancedOptions, ITxOutput } from "./interfaces";
 
-const BITBOXSDK = require('bitbox-sdk');
-const BITBOX = new BITBOXSDK.default();
+const BITBOXSDK = require('bitbox-sdk').BITBOX;
+const BITBOX = new BITBOXSDK();
 
 declare var CryptoJS: any;
 

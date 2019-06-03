@@ -1,5 +1,5 @@
-const BITBOXSDK = require('bitbox-sdk');
-const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v2/" });
+const BITBOXSDK = require('bitbox-sdk').BITBOX;
+const BITBOX = new BITBOXSDK({ restURL: "https://rest.bitcoin.com/v2/" });
 
 export const getWalletInfo = async (addr: string, verbose: boolean) => {
     try {
