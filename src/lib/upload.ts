@@ -2,7 +2,7 @@
 import { findBiggestUtxo } from "./utils";
 import { bfp as Bfp } from "./bitcoinfiles/index";
 
-const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
+const BITBOXSDK = require('bitbox-sdk');
 const BITBOX = new BITBOXSDK.default();
 
 const bfp = new Bfp(BITBOXSDK.default);

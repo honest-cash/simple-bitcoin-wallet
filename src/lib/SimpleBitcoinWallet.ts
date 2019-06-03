@@ -3,7 +3,7 @@ import { sendBch } from "./distributeFunds";
 import { getWalletInfo } from "./getWalletInfo";
 import { IAdvancedOptions, ITxOutput } from "./interfaces";
 
-const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
+const BITBOXSDK = require('bitbox-sdk');
 const BITBOX = new BITBOXSDK.default();
 
 declare var CryptoJS: any;

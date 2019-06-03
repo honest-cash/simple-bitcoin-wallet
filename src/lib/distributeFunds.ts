@@ -1,5 +1,5 @@
-const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
-const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v1/" });
+const BITBOXSDK = require('bitbox-sdk');
+const BITBOX = new BITBOXSDK.default({ restURL: "https://rest.bitcoin.com/v2/" });
 
 import { sortUtxosBySize, SortingOrder, toBuffer } from "./utils";
 import { ITransactionReceiver, IWalletInfo, IOpReturnOutput, ITxOutput, isTransactionReceiver, isOpReturnOutput, ISeparatedOutputs, IUtxo, IHexTransaction } from "./interfaces";

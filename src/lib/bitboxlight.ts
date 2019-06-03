@@ -1,4 +1,4 @@
-const BITBOXSDK = require('bitbox-light/lib/bitbox-sdk');
+const BITBOXSDK = require('bitbox-sdk');
 const bitbox = new BITBOXSDK.default();
 
 if (typeof global !== "undefined") {
