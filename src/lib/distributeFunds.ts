@@ -38,7 +38,7 @@ const calculateFee = (
 
     const opReturnByteCount = opReturnScripts.reduce((acc, script) => acc + script.byteLength, 0);
 
-    return Math.floor((byteCount + opReturnByteCount) * satsPerByte);
+    return Math.ceil((byteCount + opReturnByteCount) * satsPerByte);
 };
 
 const separateOutputs = (
