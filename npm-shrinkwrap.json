@@ -1,6 +1,6 @@
 {
   "name": "simple-bitcoin-wallet",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -10404,7 +10404,7 @@
         },
         "find-up": {
           "version": "3.0.0",
-          "resolved": false,
+          "resolved": "https://registry.npmjs.org/find-up/-/find-up-3.0.0.tgz",
           "integrity": "sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg==",
           "dev": true,
           "requires": {
@@ -10453,7 +10453,7 @@
         },
         "locate-path": {
           "version": "3.0.0",
-          "resolved": false,
+          "resolved": "https://registry.npmjs.org/locate-path/-/locate-path-3.0.0.tgz",
           "integrity": "sha512-7AO748wWnIhNqAuaty2ZWHkQHRSNfPVIsPIfwEOWO22AmaoVrWavlOcMR5nzTLNYvp36X220/maaRsrec1G65A==",
           "dev": true,
           "requires": {
@@ -10516,7 +10516,7 @@
         },
         "p-locate": {
           "version": "3.0.0",
-          "resolved": false,
+          "resolved": "https://registry.npmjs.org/p-locate/-/p-locate-3.0.0.tgz",
           "integrity": "sha512-x+12w/To+4GFfgJhBEpiDcLozRJGegY+Ei7/z0tSLkMmxGZNybVMSfWj9aJn8Z5Fc7dBUNJOOVgPv2H7IwulSQ==",
           "dev": true,
           "requires": {
@@ -10537,7 +10537,7 @@
         },
         "pkg-dir": {
           "version": "3.0.0",
-          "resolved": false,
+          "resolved": "https://registry.npmjs.org/pkg-dir/-/pkg-dir-3.0.0.tgz",
           "integrity": "sha512-/E57AYkoeQ25qkxMj5PBOVgF8Kiu/h7cYS30Z5+R7WaiCCBfLq58ZI/dSeaEKb9WVJV5n/03QwrN3IeWIFllvw==",
           "dev": true,
           "requires": {
@@ -10552,7 +10552,7 @@
         },
         "resolve-from": {
           "version": "4.0.0",
-          "resolved": false,
+          "resolved": "https://registry.npmjs.org/resolve-from/-/resolve-from-4.0.0.tgz",
           "integrity": "sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==",
           "dev": true
         },
