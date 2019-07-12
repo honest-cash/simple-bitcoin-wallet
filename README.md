@@ -3,18 +3,16 @@
 
 For web developers building applications for Bitcoin Cash, Simple Wallet provides an easy and quick way to create BCH wallets and send bitcoin around. simple-bitcoin-wallet gives developers high-level interfaces that hides most of the complexity required for such functionality. The mission is to make interaction with Bitcoin Cash Blockchain as simple as possible.
 
-Simple Wallet is used for <a href="https://honest.cash" target="_blank">Honest.Cash</a>. It uses a lightweight version of Bitbox - <a href="https://www.npmjs.com/package/bitbox-light">Bitbox Light</a>.
+Simple Wallet is used for <a href="https://honest.cash" target="_blank">Honest.Cash</a>. It uses Bitbox and rest.bitcoin.com.
 
 The default derivation path for the wallet keypair is m/44'/0'/0'/0/0.
-
-The package is 1.1 MiB compressed (it uses a light version of bitbox).
 
 # Functionality
 * Create wallets
 
 * Send Transactions (1:n fund distribution possible!)
 
-* Upload and Download data from the blockchain
+* Upload and Download data from the blockchain (deprecated)
 
 * Support for encryption of recovery phrases
 
@@ -24,11 +22,6 @@ The package is 1.1 MiB compressed (it uses a light version of bitbox).
 #### Add to your HTML scripts
 ```js
 <script src="https://honest.cash/js/simple-bitcoin-wallet.min.js"></script>
-```
-
-You can also import bitbox light without simple-bitcoin-wallet. You will be able to access it then with window.bitbox.
-```js
-<script src="https://honest.cash/js/bitboxlight.min.js"></script>
 ```
 
 #### Node module
@@ -245,13 +238,13 @@ const simpleWallet2 = new SimpleWallet(localStorage.getItem("BCH_MNEMONIC"));
 
 # Licence
 **Copyright 2018-2019**
+- Honest Cash (honest.cash)
+- Alphateam Hackers GmbH (https://alphateamhackers.com)
 - Adrian Barwicki (adrian@adrianbarwicki.com)
 - Rosco Kalis (rosco.kalis@gmail.com)
-- Honest Cash (honest.cash)
+- Josh Ellithorpe (quest@mac.com)
 
 **MIT**
 
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
