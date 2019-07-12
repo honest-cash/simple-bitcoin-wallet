@@ -73,7 +73,9 @@ const getNecessaryUtxosAndChange = (
         // Additional cost per Utxo input is 148 sats
         satoshisNeeded += 148;
 
-        if (satoshisAvailable >= satoshisNeeded) break;
+        if (satoshisAvailable >= satoshisNeeded) {
+            break;
+        }
     }
 
     let change = satoshisAvailable - satoshisNeeded;
