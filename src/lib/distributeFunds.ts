@@ -45,10 +45,10 @@ const separateOutputs = (
     outputs: ITxOutput[]
 ): ISeparatedOutputs => {
     const receivers = outputs
-            .filter((output) => isTransactionReceiver(output)) as ITransactionReceiver[];
+        .filter((output) => isTransactionReceiver(output)) as ITransactionReceiver[];
     const opReturnScripts = outputs
-            .filter((output) => isOpReturnOutput(output))
-            .map((output) => createOpReturnScript(output as IOpReturnOutput));
+        .filter((output) => isOpReturnOutput(output))
+        .map((output) => createOpReturnScript(output as IOpReturnOutput));
 
     return { receivers, opReturnScripts };
 };
@@ -73,7 +73,7 @@ const getNecessaryUtxosAndChange = (
         // Additional cost per Utxo input is 148 sats
         satoshisNeeded += 148;
 
-        if (satoshisAvailable > satoshisNeeded) break;
+        if (satoshisAvailable >= satoshisNeeded) break;
     }
 
     let change = satoshisAvailable - satoshisNeeded;
