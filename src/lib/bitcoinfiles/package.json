@@ -35,7 +35,7 @@
   "homepage": "https://github.com/simpleledgerinc/bitcoinfilesjs#readme",
   "dependencies": {},
   "devDependencies": {
-    "bitbox-sdk": "^2.2.8",
+    "bitbox-sdk": "^8.11.2",
     "browserify": "^16.2.2",
     "mocha": "^5.2.0",
     "uglify-es": "^3.3.9"
